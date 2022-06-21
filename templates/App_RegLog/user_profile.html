@@ -1,0 +1,96 @@
+{% extends 'navbar.html' %}
+
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title_block %} {{user.user_profile.full_name}} (@{{user.username}}){% endblock %}
+
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/userprofileposts.css' %}">
+{% endblock %}
+
+
+
+
+{% block body %}
+
+<div class="row">
+  <div class="col-sm-4">
+    {% if user.user_profile.profile_pic %}
+    <img src="/media/{{user.user_profile.profile_pic}}" width="250px" height="230px" class="rounded-circle">
+    {% else %}
+    <img src="/media/profile_pics/default.png" width="250px%" height="230px" class="rounded-circle">
+    {% endif %}
+  </div>
+  <div class="col-sm-4">
+    <h3>{{ user.user_profile.full_name}}&nbsp; <a href="{% url 'App_RegLog:profile_edit' %}"class="btn btn-light">Edit Profile</a></h3>
+    <br>
+    <p>@{{ user.username}}</p>
+    <br>
+    <h5>{{user.user_post.count }} Posts &nbsp; &nbsp; {{user.following.count }} Follower &nbsp; &nbsp; {{user.follower.count}} Following</h5>
+    <br>
+    <p>{{user.user_profile.description|linebreaks}}</p>
+    <!-- <h4></h4> -->
+  </div>
+</div>
+
+<hr>
+
+<br>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Create New Post</button>
+<br>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Create Post</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data">
+                  {{ form|crispy}}
+                  {% csrf_token %}
+                  <button type="submit" name="button" class="btn btn-success">Post</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<br>
+
+
+  {% for post in user.user_post.all %}
+  <div class="gallary">
+    <div class="padding">
+      <a href="{% url 'App_RegLog:post' post.id %}"><img src="/media/{{post.image}}" title={{post.caption}} height="400px" width="600px"></a>
+
+    </div>
+  </div>
+  {% endfor %}
+
+<br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

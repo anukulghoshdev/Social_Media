@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title_block %} Image{% endblock %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/.css' %}">
+{% endblock %}
+
+
+
+
+
+{% block body %}
+<h4>{{post.caption}}</h4>
+<br><br>
+<img src="/media/{{post.image}}" title={{post.caption}} width="680px">
+
+{% endblock %}
